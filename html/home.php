@@ -8,10 +8,10 @@ include_once('includes/functions.php');
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
 // If the user is not logged in redirect to the login page...
-// if (!isset($_SESSION['loggedin'])) {
-// 	header('Location: index.php');
-// 	exit;
-// }
+if (!isset($_SESSION['loggedin'])) {
+	header('Location: index.php');
+	exit;
+}
 
 ?>
 

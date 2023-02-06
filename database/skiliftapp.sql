@@ -21,6 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `ski_lift_app`
 --
+CREATE DATABASE `ski_lift_app`;
+
+USE `ski_lift_app`;
 
 -- --------------------------------------------------------
 
