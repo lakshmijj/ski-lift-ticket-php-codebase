@@ -84,14 +84,14 @@ function addRegistration(array $data){
 }
 
 /*
-* return all registrations
+* return all members
 * @return array
 */
-function getRegistrations(){
+function getMembers(){
     $conn = connectToDB();
     $data = [];
     if($conn){
-        $data = $conn->query("SELECT * FROM registration")->fetchAll();
+        $data = $conn->query("SELECT * FROM app_members")->fetchAll();
     }
     return $data;
 }
@@ -116,5 +116,11 @@ function niceBool(int $value){
     }
     return 'No';
 }
+
+function sortMyList(array $array, string $property) {
+    $key_values = array_column($array, $property);
+    array_multisort($key_values, SORT_ASC, $array);
+}
+
 
 ?>

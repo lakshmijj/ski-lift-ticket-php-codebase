@@ -21,6 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `ski_lift_app`
 --
+CREATE DATABASE `ski_lift_app`;
+
+USE `ski_lift_app`;
 
 -- --------------------------------------------------------
 
@@ -59,6 +62,16 @@ CREATE TABLE `app_members` (
   `mem_bar_code` varchar(50) NOT NULL,
   `mem_last_updated` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `app_members`
+--
+
+INSERT INTO `app_members` (`mem_pass_number`, `mem_first_name`, `mem_last_name`, `mem_status`, `mem_payment_status`, `mem_bar_code`, `mem_last_updated`) VALUES
+(00001, 'Jenna', 'Chase', 'Active', 'Paid', 10612587315464669148831491824678452609529717308215, '01-10-2022'),
+(00002, 'Luka', 'Sign', 'Active', 'Paid', 10612587315464669148831491824678452609529717308215, '01-03-2022'),
+(00003, 'Dom', 'Torretto', 'Cancelled', 'Paid', 10612587315464669148831491824678452609529717308215, '01-07-2022'),
+(00004, 'Alan', 'Burks', 'Active', 'Pending', 10612587315464669148831491824678452609529717308215, '01-11-2022');
 
 -- --------------------------------------------------------
 
