@@ -50,7 +50,7 @@ function mySort(string $prop)
                     <th scope="col">Payment Status</th>
                     <th scope="col">Last Update</th>
                     <th scope="col"></th>
-                    <th scope="col"></th>
+                    <th scope="col"><a href="addmember.php"><button class="btn btn-secondary">Add <i class="fa-solid fa-plus"></i></button></a></th>
                 </tr>
             </thead>
             <tbody>

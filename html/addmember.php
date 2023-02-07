@@ -1,50 +1,66 @@
 <?php
 session_start();
 
+include_once('includes/functions.php');
+
+//get current request method from $_SERVER GLOBAL
+$request_method = strtoupper($_SERVER['REQUEST_METHOD']);
+
+
+//form errors
+$fields = [
+    'mem_pass_number',
+    'mem_first_name',
+    'mem_last_name',
+    'mem_status',
+    'mem_payment_status',
+    'mem_bar_code',
+    'mem_last_updated',
+];
+
+$optional = [];
+$values = [];
 $errors = [];
-$saved = [];
 
-if (isset($_SESSION['errors'])) {
-    //save form errors session array to var
-    $errors = $_SESSION['errors'];
+// loop through fields
+foreach ($fields as $field) {
 
-    //unset session
-    unset($_SESSION['errors']);
-}
+    //if post, check for empty fields
+    if ($request_method === 'POST') {
+        //if field was submitted and is empty, add to errors array
+        if (empty($_POST[$field]) && !in_array($field, $optional)) {
+            $errors[] = $field;
+        }
+    }
 
-if (isset($_SESSION['saved'])) {
-    //save form errors session array to var
-    $saved = $_SESSION['saved'];
-
-    var_dump($saved);
-    var_dump(in_array($saved[$name], $saved));
-
-    //unset session
-    unset($_SESSION['saved']);
-}
-
-/**
- * returns css class for invalid input
- * @param string $name
- * @return mixed string or null
- */
-function isInvalid(string $name)
-{
-    global $errors;
-    return (in_array($name, $errors)) ? 'is-invalid' : null;
-}
-
-/**
- * 
- */
-function isSaved(string $name)
-{
-    global $saved;
-    if (isset($saved[$name])) {
-        return (in_array($saved[$name], $saved)) ? $saved[$name] : null;
+    // if field was submitted save to $values array
+    if (isset($_POST[$field])) {
+        $values[$field] = $_POST[$field];
+    } else {
+        // field was not submitted so set to null
+        $values[$field] = null;
     }
 }
 
+/**
+ * returns field is-invalid css class
+ * @param string $field
+ * @param array $errors
+ * @return mixed string or null
+ */
+function isInvalid(string $field)
+{
+    global $errors;
+    return (in_array($field, $errors)) ? 'is-invalid' : null;
+}
+
+if($request_method == 'POST') {
+    if(empty($errors)) {
+        addRegistration($_POST);
+    } else {
+        var_dump($errors);
+    }
+}
 ?>
 
 <!doctype html>
@@ -55,6 +71,8 @@ function isSaved(string $name)
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Add Member</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link href="./css/styles.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -68,18 +86,18 @@ function isSaved(string $name)
             </div>
             <div class="row d-flex justify-content-center">
                 <div class="col-10 col-sm-8 col-md-6 rounded shadow border">
-                    <form method="post" action="register-post.php" class="py-4 px-3 needs-validation" novalidate>
+                    <form method="post" action="<?php htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="py-4 px-3 needs-validation" novalidate>
                         <div class="mb-3 has-validation">
-                            <label for="fname">First Name <nobr class="text-danger">*</nobr></label>
-                            <input type="text" id="fname" name="fname" placeholder="John" class="form-control <?php echo isInvalid('fname'); ?>" value="<?php echo isSaved('fname'); ?>" required />
+                            <label for="mem_first_name">First Name <nobr class="text-danger">*</nobr></label>
+                            <input type="text" id="mem_first_name" name="mem_first_name" placeholder="John" class="form-control <?php echo isInvalid('mem_first_name'); ?>" value="" required />
 
                             <div class="invalid-feedback">
                                 Please enter a first name
                             </div>
                         </div>
                         <div class="mb-3 has-validation">
-                            <label for="lname">Last Name <nobr class="text-danger">*</nobr></label>
-                            <input type="text" id="lname" name="lname" placeholder="Wick" class="form-control <?php echo isInvalid('lname'); ?>" value="<?php echo isSaved('lname'); ?>" required />
+                            <label for="mem_last_name">Last Name <nobr class="text-danger">*</nobr></label>
+                            <input type="text" id="mem_last_name" name="mem_last_name" placeholder="Wick" class="form-control <?php echo isInvalid('mem_last_name'); ?>" value="" required />
 
                             <div class="invalid-feedback">
                                 Please enter a last name
@@ -89,33 +107,33 @@ function isSaved(string $name)
                         </h5>
                         <div class="mb-3 has-validation">
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('program'); ?>" type="radio" name="program" id="program1" value="IT Web Programming" required checked />
+                                <input class="form-check-input <?php echo isInvalid('mem_status'); ?>" type="radio" name="mem_status" id="mem_status-active" value="Active" required checked />
                                 <label class="form-check-label" for="program1">Active</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('program'); ?>" type="radio" name="program" id="program2" value="IT Systems and Security" required />
+                                <input class="form-check-input <?php echo isInvalid('mem_status'); ?>" type="radio" name="mem_status" id="mem_status-cancelled" value="Cancelled" required />
                                 <label class="form-check-label" for="program2">Cancelled</label>
 
                                 <div class="invalid-feedback">
-                                    Please select a program
+                                    Please select a status
                                 </div>
                             </div>
                         </div>
-                        <h5>Are you a returning student? <nobr class="text-danger">*</nobr>
+                        <h5>Payment Status <nobr class="text-danger">*</nobr>
                         </h5>
 
                         <div class="mb-3 has-validation">
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('returnng'); ?>" type="radio" name="payment-status" id="payment-paid" value="paid" required checked />
-                                <label class="form-check-label" for="returning-yes">Paid</label>
+                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-paid" value="paid" required checked />
+                                <label class="form-check-label" for="mem_payment_status-paid">Paid</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('returning'); ?>" type="radio" name="payment-status" id="payment-pending" value="pending" required />
-                                <label class="form-check-label" for="returning-yes">Pending</label>
+                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-pending" value="pending" required />
+                                <label class="form-check-label" for="mem_payment_status-pending">Pending</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('returning'); ?>" type="radio" name="payment-status" id="payment-refunded" value="refunded" required />
-                                <label class="form-check-label" for="returning-no">Refunded</label>
+                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-refunded" value="refunded" required />
+                                <label class="form-check-label" for="mem_payment_status-refunded">Refunded</label>
 
                                 <div class="invalid-feedback">
                                     Please select an option
@@ -123,9 +141,14 @@ function isSaved(string $name)
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="fname">Date last updated <nobr class="text-danger">*</nobr></label>
-                            <input type="date" id="fname" name="fname" class="form-control" required />
+                            <label for="mem_last_updated">Date last updated <nobr class="text-danger">*</nobr></label>
+                            <input type="datetime-local" id="mem_last_updated" name="mem_last_updated" class="form-control" value="" />
                         </div>
+
+                        <!-- HIDDEN INPUTS FOR BARCODE AND ID -->
+                        <input type="text" id="mem_pass_number" name="mem_pass_number" class="form-control" value="10000" required />
+                        <input type="hidden" id="mem_bar_code" name="mem_bar_code" class="form-control" value="10612587315464669148831491824678452609529717308215" required />
+
                         <div class="mb-3">
                             <input type="submit" class="btn btn-primary" value="Register" />
                         </div>

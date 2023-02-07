@@ -65,23 +65,18 @@ function authenticate(array $data){
 */
 function addRegistration(array $data){
     $conn = connectToDB();
-
-    if(isset($data['returning'])){
-        $data['returning'] = ($data['returning'] === 'Yes') ? 1 : 0;
-    }
+    // if(isset($data['returning'])){
+    //     $data['returning'] = ($data['returning'] === 'Yes') ? 1 : 0;
+    // }
 
     if($conn){
-        $sql = "INSERT INTO registration (fname, lname, email, program, returning) VALUES (:fname, :lname, :email, :program, :returning)";
-        //$conn->prepare($sql)->execute([
-        //    'fname'=> $data['fname'],
-        //    'lname' => $data['lname'],
+        $sql = "INSERT INTO app_members (mem_pass_number, mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated) VALUES (:mem_pass_number, :mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)";
 
-        //]);
         $conn->prepare($sql)->execute($data);
     }
 
     //redirect back to index
-    return header("Location: index.php");
+    return header("Location: existingmembers.php");
 }
 
 /*
@@ -122,6 +117,3 @@ function sortMyList(array $array, string $property) {
     $key_values = array_column($array, $property);
     array_multisort($key_values, SORT_ASC, $array);
 }
-
-
-?>
