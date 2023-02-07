@@ -46,12 +46,13 @@ function authenticate(array $data){
     $sql = "SELECT COUNT(*) FROM app_users WHERE user_name = '".$data['username'] ."' AND user_pwd = '".$data['password']."'";
     
     $result = $conn->query($sql)->fetchAll();
-    var_dump($result);
-    if(isset($result)){
+    if(isset($result) && $result[0][0]>0){
+        $_SESSION['logginError'] = FALSE;
         $_SESSION['loggedin'] = TRUE;
 		$_SESSION['name'] = $_POST['username'];
         return header("Location: home.php");
     }else{
+        $_SESSION['logginError'] = TRUE;
         return header("Location: index.php");
     }
    

@@ -87,6 +87,13 @@ if($request_method === "POST"){
 </head>
 
 <body>
+<!-- Error Alert -->
+<?php if(isset($_SESSION['logginError']) && $_SESSION['logginError']) { ?>
+<div class="alert alert-danger alert-dismissible fade show text-center">
+    <strong>Error!</strong> Invalid login, please contact administrator for the support
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+<?php } ?>
     <div class="login">
 			<h1>Login</h1>
 			<form action="<?php htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
