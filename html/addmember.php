@@ -58,6 +58,7 @@ function isSaved(string $name)
 </head>
 
 <body>
+    <?php include 'includes/header.php'; ?>
     <div class="min-vh-100 d-flex align-items-center">
         <div class="container">
             <div class="row">
@@ -102,7 +103,7 @@ function isSaved(string $name)
                         </div>
                         <h5>Are you a returning student? <nobr class="text-danger">*</nobr>
                         </h5>
-                        
+
                         <div class="mb-3 has-validation">
                             <div class="form-check">
                                 <input class="form-check-input <?php echo isInvalid('returnng'); ?>" type="radio" name="payment-status" id="payment-paid" value="paid" required checked />

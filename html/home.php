@@ -29,14 +29,7 @@ if (!isset($_SESSION['loggedin'])) {
 </head>
 
 <body class="loggedin">
-		<nav class="navtop">
-			<div>
-				<h1>Website Title</h1>
-				<a href="profile.php"><i class="fas fa-user-circle"></i>Members</a>
-				<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Update Visit</a>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Reports</a>
-			</div>
-		</nav>
+		<?php include 'includes/header.php'; ?>
 		<div class="content">
 			<h2>Home Page</h2>
 			<p>Welcome back, <?=$_SESSION['name']?>!</p>

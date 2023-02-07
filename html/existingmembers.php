@@ -11,11 +11,12 @@ $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 $members = getMembers();
 
 // sortMyList($members, 'mem_last_name');
-function mySort(string $prop) {
+function mySort(string $prop)
+{
     global $members;
     $key_values = array_column($members, $prop);
     array_multisort($key_values, SORT_ASC, $members);
-    header('Refresh: 0');
+    // header('Refresh: 0');
 }
 
 ?>
@@ -33,6 +34,7 @@ function mySort(string $prop) {
 </head>
 
 <body>
+    <?php include 'includes/header.php'; ?>
     <div class="container mt-5 center border rounded shadow">
         <div class="container mt-3 mb-3">
             <h1 class="">Members</h1>
@@ -41,8 +43,8 @@ function mySort(string $prop) {
         <table class="table table-striped mt-5">
             <thead>
                 <tr class="">
-                    <th scope="col"><a >Member ID</a></th>
-                    <th scope="col"><a >First</a></th>
+                    <th scope="col"><a>Member ID</a></th>
+                    <th scope="col"><a>First</a></th>
                     <th scope="col">Last</th>
                     <th scope="col">Member Status</th>
                     <th scope="col">Payment Status</th>
