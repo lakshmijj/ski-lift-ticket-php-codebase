@@ -150,7 +150,7 @@ if($request_method == 'POST') {
                         </div>
 
                         <!-- HIDDEN INPUTS FOR BARCODE AND ID -->
-                        <input type="text" id="mem_pass_number" name="mem_pass_number" class="form-control" value="10000" required />
+                        <input type="text" id="mem_pass_number" name="mem_pass_number" class="form-control" value="<?php echo $member['mem_pass_number']; ?>" required />
                         <input type="hidden" id="mem_bar_code" name="mem_bar_code" class="form-control" value="10612587315464669148831491824678452609529717308215" required />
 
                         <div class="mb-3">
