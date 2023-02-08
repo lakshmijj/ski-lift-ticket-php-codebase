@@ -93,17 +93,25 @@ function getMembers(){
 }
 
 /*
-* Delete registrations
+* Delete selected members
 * @param array $keys
 * @return void
 */
-function deleteRegistrations($keys){
+function deleteSelectedMembers(){
     $conn = connectToDB();
-    $ids = implode("','", $keys);
-    // sql to delete a record
-    $sql = "DELETE FROM registration WHERE id IN ('".$ids."')";
-    $conn->query($sql);
-    return header("Location: registrations.php");
+    $delSql = [];
+    
+    if (!empty($_POST["checkbox"])) {
+        foreach ($_POST["checkbox"] as $id) {
+            // var_dump($id);
+            $delSql[] = intval($id);
+        }
+        $list = implode(', ', $delSql);
+        
+        $conn->query("DELETE FROM app_members WHERE mem_pass_number IN ($list)");
+    }
+
+    return header("Location: existingmembers.php");
 }
 
 function niceBool(int $value){
