@@ -6,7 +6,9 @@ include_once('includes/functions.php');
 //get current request method from $_SERVER GLOBAL
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
-
+$id = $_GET['mem_pass_number'];
+$member = getMember($id)[0];
+ 
 //form errors
 $fields = [
     'mem_pass_number',
@@ -42,8 +44,6 @@ foreach ($fields as $field) {
     }
 }
 
-var_dump($values);
-
 /**
  * returns field is-invalid css class
  * @param string $field
@@ -58,11 +58,13 @@ function isInvalid(string $field)
 
 if($request_method == 'POST') {
     if(empty($errors)) {
-        addRegistration($_POST);
+        updateMember($_POST, $id);
     } else {
         var_dump($errors);
     }
 }
+
+
 ?>
 
 <!doctype html>
@@ -71,7 +73,7 @@ if($request_method == 'POST') {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Member</title>
+    <title>Edit Member</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <link href="./css/styles.css" rel="stylesheet" />
@@ -83,7 +85,7 @@ if($request_method == 'POST') {
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center mb-4">
-                    <h1>Add Member</h1>
+                    <h1>Edit Member <?php ?></h1>
                 </div>
             </div>
             <div class="row d-flex justify-content-center">
@@ -91,7 +93,7 @@ if($request_method == 'POST') {
                     <form method="post" action="<?php htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="py-4 px-3 needs-validation" novalidate>
                         <div class="mb-3 has-validation">
                             <label for="mem_first_name">First Name <nobr class="text-danger">*</nobr></label>
-                            <input type="text" id="mem_first_name" name="mem_first_name" placeholder="John" class="form-control <?php echo isInvalid('mem_first_name'); ?>" value="" required />
+                            <input type="text" id="mem_first_name" name="mem_first_name" placeholder="John" class="form-control <?php echo isInvalid('mem_first_name'); ?>" value="<?php echo $member['mem_first_name'] ?>" required />
 
                             <div class="invalid-feedback">
                                 Please enter a first name
@@ -99,7 +101,7 @@ if($request_method == 'POST') {
                         </div>
                         <div class="mb-3 has-validation">
                             <label for="mem_last_name">Last Name <nobr class="text-danger">*</nobr></label>
-                            <input type="text" id="mem_last_name" name="mem_last_name" placeholder="Wick" class="form-control <?php echo isInvalid('mem_last_name'); ?>" value="" required />
+                            <input type="text" id="mem_last_name" name="mem_last_name" placeholder="Wick" class="form-control <?php echo isInvalid('mem_last_name'); ?>" value="<?php echo $member['mem_last_name'] ?>" required />
 
                             <div class="invalid-feedback">
                                 Please enter a last name
@@ -109,11 +111,11 @@ if($request_method == 'POST') {
                         </h5>
                         <div class="mb-3 has-validation">
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('mem_status'); ?>" type="radio" name="mem_status" id="mem_status-active" value="Active" required checked />
+                                <input class="form-check-input <?php echo isInvalid('mem_status'); ?>" type="radio" name="mem_status" id="mem_status-active" value="Active" <?php echo ($member['mem_status'] === 'Active') ? 'checked' : null ?> required />
                                 <label class="form-check-label" for="program1">Active</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('mem_status'); ?>" type="radio" name="mem_status" id="mem_status-cancelled" value="Cancelled" required />
+                                <input class="form-check-input <?php echo isInvalid('mem_status'); ?>" type="radio" name="mem_status" id="mem_status-cancelled" value="Cancelled" <?php echo ($member['mem_status'] === 'Cancelled') ? 'checked' : null ?> required />
                                 <label class="form-check-label" for="program2">Cancelled</label>
 
                                 <div class="invalid-feedback">
@@ -126,15 +128,15 @@ if($request_method == 'POST') {
 
                         <div class="mb-3 has-validation">
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-paid" value="paid" required checked />
+                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-paid" value="paid" <?php echo ($member['mem_payment_status'] === 'Paid') ? 'checked' : null ?> required  />
                                 <label class="form-check-label" for="mem_payment_status-paid">Paid</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-pending" value="pending" required />
+                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-pending" value="pending" <?php echo ($member['mem_payment_status'] === 'Pending') ? 'checked' : null ?> required />
                                 <label class="form-check-label" for="mem_payment_status-pending">Pending</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-refunded" value="refunded" required />
+                                <input class="form-check-input <?php echo isInvalid('mem_payment_status'); ?>" type="radio" name="mem_payment_status" id="payment-refunded" value="refunded" <?php echo ($member['mem_payment_status'] === 'Refunded') ? 'checked' : null ?> required />
                                 <label class="form-check-label" for="mem_payment_status-refunded">Refunded</label>
 
                                 <div class="invalid-feedback">

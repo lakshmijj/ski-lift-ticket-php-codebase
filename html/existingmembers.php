@@ -50,7 +50,7 @@ if ($request_method == 'POST') {
                     <p>Here you can view all existing member data. You can also perform create, update, and delete actions here.</p>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <a href="addmember.php"><button class="btn btn-secondary mx-3">Add</button></a>
+                    <button class="btn btn-secondary mx-3"><a href="addmember.php" class="text-white text-decoration-none">Add</a></button>
 
                     <a href="delete.php"><button class="btn btn-danger">Delete Selected</button></a>
                 </div>
@@ -78,7 +78,7 @@ if ($request_method == 'POST') {
                             <td class="<?php echo ($member['mem_status'] === 'Active') ? 'text-success' : 'text-danger'; ?>"><?php echo $member['mem_status'] ?></td>
                             <td><?php echo $member['mem_payment_status'] ?></td>
                             <td><?php echo $member['mem_last_updated'] ?></td>
-                            <td><button class="btn btn-light">Edit</button></td>
+                            <td><a href="editmember.php?mem_pass_number=<?php echo $member['mem_pass_number']; ?>">Edit</a></td>
                             <td class="check"><input class="checkbox" name="checkbox[]" type="checkbox" value="<?php echo $member['mem_pass_number'] ?>"></td>
                         </tr>
                     <?php endforeach; ?>
