@@ -1,4 +1,5 @@
 <?php
+
 include_once('config.php');
 
 /*
@@ -85,8 +86,6 @@ function addMember(array $data)
 function updateMember(array $data, int $id)
 {
     $conn = connectToDB();
-    // unset($data['mem_pass_number']);
-    echo $id;
 
     if ($conn) {
         $sql = "UPDATE app_members 
@@ -94,9 +93,6 @@ function updateMember(array $data, int $id)
         SET mem_first_name=:mem_first_name, mem_last_name=:mem_last_name, mem_status=:mem_status, mem_payment_status=:mem_payment_status, mem_bar_code=:mem_bar_code, mem_last_updated=:mem_last_updated
         -- VALUES (:mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)
         WHERE mem_pass_number = '$id'";
-        
-
-        // echo $sql;
 
         $conn->prepare($sql)->execute($data);
     }

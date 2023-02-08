@@ -6,7 +6,6 @@ include_once('includes/functions.php');
 //get current request method from $_SERVER GLOBAL
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
-
 //form errors
 $fields = [
     'mem_pass_number',
@@ -41,8 +40,6 @@ foreach ($fields as $field) {
         $values[$field] = null;
     }
 }
-
-var_dump($values);
 
 /**
  * returns field is-invalid css class
