@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 include_once('includes/functions.php');
@@ -11,7 +12,7 @@ $member = getMember($id)[0];
  
 //form errors
 $fields = [
-    'mem_pass_number',
+    // 'mem_pass_number',
     'mem_first_name',
     'mem_last_name',
     'mem_status',
@@ -63,8 +64,6 @@ if($request_method == 'POST') {
         var_dump($errors);
     }
 }
-
-
 ?>
 
 <!doctype html>
@@ -150,7 +149,6 @@ if($request_method == 'POST') {
                         </div>
 
                         <!-- HIDDEN INPUTS FOR BARCODE AND ID -->
-                        <input type="text" id="mem_pass_number" name="mem_pass_number" class="form-control" value="<?php echo $member['mem_pass_number']; ?>" required />
                         <input type="hidden" id="mem_bar_code" name="mem_bar_code" class="form-control" value="10612587315464669148831491824678452609529717308215" required />
 
                         <div class="mb-3">

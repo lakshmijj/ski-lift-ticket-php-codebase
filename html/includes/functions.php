@@ -6,22 +6,21 @@ include_once('config.php');
 * @return mixed
 */
 
-function connectToDB(){
+function connectToDB()
+{
     $db = config('db');
     $servername = $db['servername'];
     $username = $db['username'];
     $password = $db['password'];
     $dbName = $db['dbName'];
 
-    try{
+    try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbName", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conn;
-
-    }catch(PDOException $e){
-        echo 'Connection Failed: '.$e->getMessage();
+    } catch (PDOException $e) {
+        echo 'Connection Failed: ' . $e->getMessage();
     }
-
 }
 
 /*
@@ -30,7 +29,8 @@ function connectToDB(){
 * @return void
 */
 
-function authenticate(array $data){
+function authenticate(array $data)
+{
     $conn = connectToDB();
     // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
     //$data = $conn->query("SELECT * FROM app_users")->fetchAll();
@@ -43,19 +43,18 @@ function authenticate(array $data){
     // $statement->bindParam(":password", $data['password']);
     // $statement->execute();
 
-    $sql = "SELECT COUNT(*) FROM app_users WHERE user_name = '".$data['username'] ."' AND user_pwd = '".$data['password']."'";
-    
+    $sql = "SELECT COUNT(*) FROM app_users WHERE user_name = '" . $data['username'] . "' AND user_pwd = '" . $data['password'] . "'";
+
     $result = $conn->query($sql)->fetchAll();
-    if(isset($result) && $result[0][0]>0){
+    if (isset($result) && $result[0][0] > 0) {
         $_SESSION['logginError'] = FALSE;
         $_SESSION['loggedin'] = TRUE;
-		$_SESSION['name'] = $_POST['username'];
+        $_SESSION['name'] = $_POST['username'];
         return header("Location: home.php");
-    }else{
+    } else {
         $_SESSION['logginError'] = TRUE;
         return header("Location: index.php");
     }
-   
 }
 
 /*
@@ -63,13 +62,14 @@ function authenticate(array $data){
 * @param array $data
 * @return void
 */
-function addRegistration(array $data){
+function addRegistration(array $data)
+{
     $conn = connectToDB();
     // if(isset($data['returning'])){
     //     $data['returning'] = ($data['returning'] === 'Yes') ? 1 : 0;
     // }
 
-    if($conn){
+    if ($conn) {
         $sql = "INSERT INTO app_members (mem_pass_number, mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated) VALUES (:mem_pass_number, :mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)";
 
         $conn->prepare($sql)->execute($data);
@@ -85,16 +85,21 @@ function addRegistration(array $data){
 * @param int $id
 * @return void
 */
-function updateMember(array $data, int $id) {
+function updateMember(array $data, int $id)
+{
     $conn = connectToDB();
-    unset($data['mem_pass_number']);
+    // unset($data['mem_pass_number']);
     echo $id;
 
-    if($conn){
+    if ($conn) {
         $sql = "UPDATE app_members 
-        SET (mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated)
-        VALUES (:mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)
-        WHERE mem_pass_number = $id";
+        -- SET (mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated)
+        SET mem_first_name=:mem_first_name, mem_last_name=:mem_last_name, mem_status=:mem_status, mem_payment_status=:mem_payment_status, mem_bar_code=:mem_bar_code, mem_last_updated=:mem_last_updated
+        -- VALUES (:mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)
+        WHERE mem_pass_number = '$id'";
+        
+
+        // echo $sql;
 
         $conn->prepare($sql)->execute($data);
     }
@@ -107,10 +112,11 @@ function updateMember(array $data, int $id) {
 * return all members
 * @return array
 */
-function getMembers(){
+function getMembers()
+{
     $conn = connectToDB();
     $data = [];
-    if($conn){
+    if ($conn) {
         $data = $conn->query("SELECT * FROM app_members")->fetchAll();
     }
     return $data;
@@ -120,11 +126,12 @@ function getMembers(){
 * return member based on pass number
 * @return object
 */
-function getMember($id){
+function getMember($id)
+{
     $conn = connectToDB();
     // $data;
 
-    if($conn){
+    if ($conn) {
         $data = $conn->query("SELECT * FROM app_members WHERE mem_pass_number = $id")->fetchAll();
     }
 
@@ -136,31 +143,34 @@ function getMember($id){
 * @param array $keys
 * @return void
 */
-function deleteSelectedMembers(){
+function deleteSelectedMembers()
+{
     $conn = connectToDB();
     $delSql = [];
-    
+
     if (!empty($_POST["checkbox"])) {
         foreach ($_POST["checkbox"] as $id) {
             // var_dump($id);
             $delSql[] = intval($id);
         }
         $list = implode(', ', $delSql);
-        
+
         $conn->query("DELETE FROM app_members WHERE mem_pass_number IN ($list)");
     }
 
     return header("Location: existingmembers.php");
 }
 
-function niceBool(int $value){
-    if($value === 1){
+function niceBool(int $value)
+{
+    if ($value === 1) {
         return 'Yes';
     }
     return 'No';
 }
 
-function sortMyList(array $array, string $property) {
+function sortMyList(array $array, string $property)
+{
     $key_values = array_column($array, $property);
     array_multisort($key_values, SORT_ASC, $array);
 }
