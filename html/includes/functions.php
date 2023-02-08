@@ -87,20 +87,19 @@ function addRegistration(array $data){
 */
 function updateMember(array $data, int $id) {
     $conn = connectToDB();
-    // if(isset($data['returning'])){
-    //     $data['returning'] = ($data['returning'] === 'Yes') ? 1 : 0;
-    // }
+    unset($data['mem_pass_number']);
+    echo $id;
 
     if($conn){
         $sql = "UPDATE app_members 
-        SET (mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated) 
-        WHERE mem_pass_number = $id
-        VALUES (:mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)";
+        SET (mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated)
+        VALUES (:mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)
+        WHERE mem_pass_number = $id";
 
         $conn->prepare($sql)->execute($data);
     }
 
-    //redirect back to index
+    //redirect back to members table
     return header("Location: existingmembers.php");
 }
 
