@@ -62,12 +62,9 @@ function authenticate(array $data)
 * @param array $data
 * @return void
 */
-function addRegistration(array $data)
+function addMember(array $data)
 {
     $conn = connectToDB();
-    // if(isset($data['returning'])){
-    //     $data['returning'] = ($data['returning'] === 'Yes') ? 1 : 0;
-    // }
 
     if ($conn) {
         $sql = "INSERT INTO app_members (mem_pass_number, mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated) VALUES (:mem_pass_number, :mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)";

@@ -58,7 +58,7 @@ function isInvalid(string $field)
 
 if($request_method == 'POST') {
     if(empty($errors)) {
-        addRegistration($_POST);
+        addMember($_POST);
     } else {
         var_dump($errors);
     }
