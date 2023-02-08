@@ -80,6 +80,31 @@ function addRegistration(array $data){
 }
 
 /*
+* update existing member
+* @param array $data
+* @param int $id
+* @return void
+*/
+function updateMember(array $data, int $id) {
+    $conn = connectToDB();
+    // if(isset($data['returning'])){
+    //     $data['returning'] = ($data['returning'] === 'Yes') ? 1 : 0;
+    // }
+
+    if($conn){
+        $sql = "UPDATE app_members 
+        SET (mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated) 
+        WHERE mem_pass_number = $id
+        VALUES (:mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)";
+
+        $conn->prepare($sql)->execute($data);
+    }
+
+    //redirect back to index
+    return header("Location: existingmembers.php");
+}
+
+/*
 * return all members
 * @return array
 */
@@ -89,6 +114,21 @@ function getMembers(){
     if($conn){
         $data = $conn->query("SELECT * FROM app_members")->fetchAll();
     }
+    return $data;
+}
+
+/*
+* return member based on pass number
+* @return object
+*/
+function getMember($id){
+    $conn = connectToDB();
+    // $data;
+
+    if($conn){
+        $data = $conn->query("SELECT * FROM app_members WHERE mem_pass_number = $id")->fetchAll();
+    }
+
     return $data;
 }
 
