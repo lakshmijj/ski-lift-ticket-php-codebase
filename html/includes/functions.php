@@ -30,8 +30,7 @@ function connectToDB()
 * @return void
 */
 
-function authenticate(array $data)
-{
+function authenticate(array $data){
     $conn = connectToDB();
     // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
     //$data = $conn->query("SELECT * FROM app_users")->fetchAll();
@@ -44,16 +43,22 @@ function authenticate(array $data)
     // $statement->bindParam(":password", $data['password']);
     // $statement->execute();
 
-    $sql = "SELECT COUNT(*) FROM app_users WHERE user_name = '" . $data['username'] . "' AND user_pwd = '" . $data['password'] . "'";
-
+    $sql = "SELECT COUNT(*) FROM app_users WHERE user_name = '".$data['username'] ."' AND user_pwd = '".$data['password']."'";
     $result = $conn->query($sql)->fetchAll();
-    if (isset($result) && $result[0][0] > 0) {
-        $_SESSION['logginError'] = FALSE;
+    if(isset($result) && $result[0][0]>0){
+        unset($_SESSION['logginError']);
+        unset($_SESSION['logginErrorMessage']);
+        unset($_SESSION['userMessage']);
         $_SESSION['loggedin'] = TRUE;
         $_SESSION['name'] = $_POST['username'];
-        return header("Location: home.php");
-    } else {
+        $_SESSION['start'] = time();
+        $_SESSION['expire'] = $_SESSION['start'] + (600 * 60); //
+        return header("Location: existingmembers.php");
+    }else{
+        unset($_SESSION['name']);
+        unset($_SESSION['expire']);
         $_SESSION['logginError'] = TRUE;
+        $_SESSION['logginErrorMessage'] = 'Invalid login, please contact administrator for the support';
         return header("Location: index.php");
     }
 }
@@ -166,4 +171,67 @@ function sortMyList(array $array, string $property)
 {
     $key_values = array_column($array, $property);
     array_multisort($key_values, SORT_ASC, $array);
+}
+
+
+/*
+* Checking session
+* Checking the session state and expiry
+* @return void
+*/
+function commonCheck(){
+    userSessionState();
+    userSessionOut();
+}
+
+/*
+* Checking session, if session is expired, navigate to index* 
+* @return void
+*/
+function userSessionState(){
+    // If the user is not logged in redirect to the login page...
+     if (!isset($_SESSION['loggedin'])) {
+        header('Location: index.php');
+        exit;
+     }
+}
+
+/*
+* Logout 
+* @param null 
+* @return void
+*/
+
+function userSessionOut(){
+    $now = time(); // Checking the time now when home page starts.
+    if ($now > $_SESSION['expire']) {
+        unset($_SESSION["loggedin"]);
+        unset($_SESSION["name"]);
+        $_SESSION['logginError'] = TRUE;
+        $_SESSION['logginErrorMessage'] = 'Your session has expired! Please login!';
+        header('Location: index.php');
+    }
+}
+
+function getHills(){
+    $conn = connectToDB();
+    $sql = "SELECT * FROM app_hills";
+    return $conn->query($sql)->fetchAll();
+
+}
+
+
+function reportDownload($fromDate,$toDate,$hillsArr){
+    $conn = connectToDB();
+
+    $sql = "SELECT mv.mem_pass_number, mv.hill_id, mv.visited_on , ah.hill_name  FROM mem_visits mv LEFT JOIN app_hills ah ON ah.hill_id=mv.hill_id";
+    if($fromDate!='' && $toDate!=''){
+        $sql .= " WHERE mv.visited_on >= DATE '$fromDate' AND mv.visited_on <= DATE '$toDate'";
+    }
+    if(!empty($hillsArr)){
+        $hillIds = implode("," , $hillsArr);
+        $sql .= " AND mv.hill_id IN ($hillIds)";
+    }
+    return $conn->query($sql)->fetchAll();
+
 }

@@ -64,13 +64,6 @@ function isInvalid(string $field)
     return (in_array($field, $errors)) ? 'is-invalid' : null;
 }
 
-//if post and no errors add Registration
-if($request_method === "POST"){
-    if(empty($errors)){
-        addRegistration($_POST);
-    }
-}
-
 ?>
 
 
@@ -90,8 +83,8 @@ if($request_method === "POST"){
 <!-- Error Alert -->
 <?php if(isset($_SESSION['logginError']) && $_SESSION['logginError']) { ?>
 <div class="alert alert-danger alert-dismissible fade show text-center">
-    <strong>Error!</strong> Invalid login, please contact administrator for the support
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Error!</strong> <?php if(isset($_SESSION['logginErrorMessage']) && $_SESSION['logginErrorMessage']){ echo $_SESSION['logginErrorMessage']; } ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 <?php } ?>
     <div class="login">
