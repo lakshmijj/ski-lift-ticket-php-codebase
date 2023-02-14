@@ -128,13 +128,7 @@ $hills = getHills();
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 		<nav class="navtop">
-			<div>
-				<h1>Website Title</h1>
-				<a href="profile.php"><i class="fas fa-user-circle"></i>Members</a>
-				<a href="logout.php"><i class="fas fa-sign-out-alt"></i>Update Visit</a>
-                <a href="reports.php"><i class="fas fa-sign-out-alt"></i>Reports</a>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
-			</div>
+        <?php include 'includes/header.php'; ?>
 		</nav>
 		<div class="content">
 			<h2>Reports</h2>
