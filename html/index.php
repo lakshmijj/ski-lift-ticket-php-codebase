@@ -80,6 +80,12 @@ function isInvalid(string $field)
 </head>
 
 <body>
+<div class="row">
+    <div class="col">
+      <img width="100%" src="https://skiatlanticseniorsclub.ca/wp-content/uploads/2022/05/cropped-banner-1.jpg">
+
+    </div>
+</div>
 <!-- Error Alert -->
 <?php if(isset($_SESSION['logginError']) && $_SESSION['logginError']) { ?>
 <div class="alert alert-danger alert-dismissible fade show text-center">

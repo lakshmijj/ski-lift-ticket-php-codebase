@@ -76,12 +76,14 @@ background-color: #2868c7;
 .navtop div {
 	display: flex;
 	margin: 0 auto;
-	width: 1000px;
+	/* width: 1000px; */
+
 	height: 100%;
 }
 .navtop div h1, .navtop div a {
 	display: inline-flex;
 	align-items: center;
+
 }
 .navtop div h1 {
 	flex: 1;
@@ -90,6 +92,7 @@ background-color: #2868c7;
 	margin: 0;
 	color: #eaebed;
 	font-weight: normal;
+  margin-left: 16px;
 }
 .navtop div a {
 	padding: 0 20px;

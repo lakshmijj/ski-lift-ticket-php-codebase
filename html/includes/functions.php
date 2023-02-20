@@ -235,3 +235,62 @@ function reportDownload($fromDate,$toDate,$hillsArr){
     return $conn->query($sql)->fetchAll();
 
 }
+
+function reportSearch($fromDate,$toDate,$hillsArr,$searchValue,$columnName,$columnSortOrder,$row,$rowperpage){
+    $conn = connectToDB();
+    $searchArray = array();
+
+// Search
+    $searchQuery = " ";
+    if($searchValue != ''){
+        $searchQuery = " AND (mv.mem_pass_number LIKE :mem_pass_number OR 
+           ah.hill_name LIKE :hill_name OR
+           mv.visited_on LIKE :visited_on 
+            ) ";
+        $searchArray = array(
+            'mem_pass_number'=>"%$searchValue%",
+            'hill_name'=>"%$searchValue%",
+            'visited_on'=>"%$searchValue%"
+        );
+    }
+
+// Total number of records without filtering
+    $sql = "SELECT mv.mem_pass_number, mv.hill_id, mv.visited_on , ah.hill_name  FROM mem_visits mv LEFT JOIN app_hills ah ON ah.hill_id=mv.hill_id";
+    $sqlAllcount = "SELECT COUNT(*) AS allcount  FROM mem_visits mv JOIN app_hills ah ON ah.hill_id=mv.hill_id ";
+    if($fromDate!='' && $toDate!=''){
+        $sql .= " WHERE mv.visited_on >= DATE '$fromDate' AND mv.visited_on <= DATE '$toDate'";
+        $sqlAllcount .= " WHERE mv.visited_on >= DATE '$fromDate' AND mv.visited_on <= DATE '$toDate'";
+    }
+    if(!empty($hillsArr)){
+        $hillIds = implode("," , $hillsArr);
+        $sql .= " AND mv.hill_id IN ($hillIds)";
+        $sqlAllcount .= " AND mv.hill_id IN ($hillIds) ";
+    }
+
+    $stmt = $conn->prepare($sqlAllcount);
+    $stmt->execute();
+    $records = $stmt->fetch();
+    $retArr['totalRecords'] = $records['allcount'];
+
+// Total number of records with filtering
+
+    $stmt = $conn->prepare($sqlAllcount.$searchQuery);
+    $stmt->execute($searchArray);
+    $records = $stmt->fetch();
+    $retArr['totalRecordwithFilter'] = $records['allcount'];
+
+// Fetch records
+    $stmt = $conn->prepare($sql.$searchQuery." ORDER BY ".$columnName." ".$columnSortOrder." LIMIT :limit,:offset");
+
+// Bind values
+    foreach ($searchArray as $key=>$search) {
+        $stmt->bindValue(':'.$key, $search,PDO::PARAM_STR);
+    }
+
+    $stmt->bindValue(':limit', (int)$row, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', (int)$rowperpage, PDO::PARAM_INT);
+    $stmt->execute();
+    $retArr['empRecords'] = $stmt->fetchAll();
+    return $retArr;
+
+}
