@@ -137,6 +137,26 @@ function getMember($id)
 }
 
 /*
+* return member based on pass number
+* @return object
+*/
+function memberValid($id)
+{
+    $conn = connectToDB();
+    $valid = false;
+
+    if ($conn) {
+        $data = $conn->query("SELECT * FROM app_members WHERE mem_pass_number = $id")->fetchAll();
+    }
+
+    if ($data) {
+        $valid = true;
+    }
+
+    return $valid;
+}
+
+/*
 * Delete selected members
 * @param array $keys
 * @return void
