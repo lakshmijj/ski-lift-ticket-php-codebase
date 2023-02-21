@@ -9,6 +9,7 @@ $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 //form errors
 $fields = [
     'mem_pass_number',
+    'hill_id'
 ];
 
 $optional = [];
@@ -20,7 +21,6 @@ $member;
 
 if (isset($_POST['mem_pass_number'])) {
     $id = $_POST['mem_pass_number'];
-    $member = getMember($id)[0];
 }
 
 // loop through fields
@@ -57,7 +57,10 @@ function isInvalid(string $field)
 
 if ($request_method == 'POST') {
     if (empty($errors)) {
-
+        if (memberValid($id)) {
+            $member = getMember($id)[0];
+            logVisit($_POST);
+        }
     } else {
         var_dump($errors);
     }
@@ -97,15 +100,13 @@ if ($request_method == 'POST') {
                             </div>
                         </div>
 
+                        <input type="hidden" id="hill_id" name="hill_id" class="form-control" value="1" required />
+
                         <div class="mb-3">
                             <input type="submit" id="btnSubmit" class="btn btn-primary" value="Verify Membership" />
                         </div>
-
-
-
-                    </form>
-                    <div class="mb-3">
-                        <?php
+                        <div class="mb-3">
+                            <?php
                             if (isset($_POST['mem_pass_number'])) {
                                 if (memberValid($id)) {
                                     echo '<h2 class="text-success">VALID</h2>';
@@ -114,13 +115,13 @@ if ($request_method == 'POST') {
                                     echo '<h4>Last Name: ' . $member['mem_last_name'] . '</h4>';
                                     echo '<h4>Membership Status: ' . $member['mem_status'] . '</h4>';
                                     echo '<h4>Payment Status: ' . $member['mem_payment_status'] . '</h4>';
-
                                 } else {
                                     echo '<h2 class="text-danger">INVALID</h2>';
                                 }
                             }
-                        ?>
-                    </div>
+                            ?>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

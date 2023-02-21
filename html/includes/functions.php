@@ -137,12 +137,14 @@ function getMember($id)
 }
 
 /*
-* return member based on pass number
-* @return object
+* validate member status based on pass number
+* @param int $id
+* @return boolean $valid
 */
 function memberValid($id)
 {
     $conn = connectToDB();
+    $member = getMember($id)[0];
     $valid = false;
 
     if ($conn) {
@@ -150,10 +152,28 @@ function memberValid($id)
     }
 
     if ($data) {
-        $valid = true;
+        if ($member['mem_status'] === 'Active') {
+            $valid = true;
+        }
     }
 
     return $valid;
+}
+
+/*
+* Add visit record to mem_visits table
+* @param array $data
+* @return void
+*/
+function logVisit(array $data) {
+    $conn = connectToDB();
+
+    if ($conn) {
+        $sql = "INSERT INTO mem_visits (mem_pass_number, hill_id, visited_on) 
+        VALUES (:mem_pass_number, :hill_id, CURRENT_TIMESTAMP)";
+
+        $conn->prepare($sql)->execute($data);
+    }
 }
 
 /*
