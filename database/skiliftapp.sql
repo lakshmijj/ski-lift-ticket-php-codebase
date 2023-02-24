@@ -34,7 +34,7 @@ USE `ski_lift_app`;
 CREATE TABLE `app_hills` (
   `hill_id` int NOT NULL,
   `hill_name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `app_hills`
@@ -61,7 +61,7 @@ CREATE TABLE `app_members` (
   `mem_payment_status` enum('Paid','Pending','Refunded') NOT NULL,
   `mem_bar_code` varchar(50) NOT NULL,
   `mem_last_updated` timestamp NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `app_members`
@@ -84,7 +84,7 @@ CREATE TABLE `app_users` (
   `user_name` varchar(100) NOT NULL,
   `user_pwd` varchar(100) NOT NULL,
   `hill_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `app_users`
@@ -105,7 +105,7 @@ CREATE TABLE `mem_visits` (
   `mem_pass_number` varchar(50) NOT NULL,
   `hill_id` int NOT NULL,
   `visited_on` timestamp NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 --
 -- Indexes for dumped tables
