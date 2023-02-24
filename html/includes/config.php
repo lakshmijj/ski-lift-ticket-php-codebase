@@ -7,10 +7,16 @@
 
 function config($key=""){
     $config = [
+        // 'db' => [
+        //     "servername" => "mysql-server",
+        //     "username" => "root",
+        //     "password" => "secret",
+        //     "dbName" => "ski_lift_app"
+        // ]
         'db' => [
-            "servername" => "mysql-server",
+            "servername" => "localhost",
             "username" => "root",
-            "password" => "secret",
+            "password" => "",
             "dbName" => "ski_lift_app"
         ]
     ];
