@@ -53,9 +53,10 @@ $hills = getHills();
             $('#notificationBlock').hide();
             var fromDate = $("#datepickerFrom").val();
             var toDate = $("#datepickerTo").val();
-
+            console.log(fromDate, toDate)
             if(fromDate!='' && toDate!=''){
                 var hillsArr = $("#hillsArr").val();
+                console.log(hillsArr);
                 var postData = {'fromDate':fromDate , 'toDate':toDate , 'hillsArr':hillsArr};
                 $('#jquery-datatable-ajax-php').DataTable({
                     'processing': true,
@@ -127,41 +128,38 @@ $hills = getHills();
     <strong>Error!&nbsp;&nbsp;&nbsp;</strong>Please specify the date range to search
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
-		<nav class="navtop">
-        <?php include 'includes/header.php'; ?>
-		</nav>
+<?php include 'includes/header.php'; ?>
 		<div class="content">
 			<h2>Reports</h2>
             <div class="row">
-                <div class="col-md-6">
-                    <span>From Date: <input type="text" id="datepickerFrom" required></span>
+                <div class="col form-group">
+                    <label  class="control-label">From</label>
+                    <input type="text" id="datepickerFrom" required>
                 </div>
-                <div class="col-md-6">
-                    <span>To Date: <input type="text" id="datepickerTo" required></span>
+                <div class="col form-group">
+                    <label class="control-label">To</label>
+                    <input type="text" id="datepickerTo" required>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <h2>Hill</h2>
-                    <select id="hillsArr" name="multicheckbox[]" multiple="multiple" class="4colactive">
+                <div class="col form-group">
+                    <label class="control-label">Select Hills</label></br>                    
+                    <select id="hillsArr" name="multicheckbox[]" multiple="multiple" class="select" value="<?php if((int)$_SESSION['hill_id'] > 0){ echo $_SESSION['hill_id']; }   ?>">
                         <?php
-                             foreach ($hills as $val){
-                              echo '<option value="'.$val['hill_id'].'">'.$val['hill_name'].'</option>';
-                             }
-                        ?>
+                             foreach ($hills as $val){ ?>
+                              <option value="<?php echo $val['hill_id'] ?>" 
+                                 <?php 
+                                     if((int)$_SESSION['hill_id'] > 0 && $_SESSION['hill_id']==$val['hill_id']) { ?> selected <?php } ?> 
+
+                                <?php if((int)$_SESSION['hill_id'] > 0 && $_SESSION['hill_id']!=$val['hill_id']){ ?> disabled <?php } ?>  
+                                ><?php echo $val['hill_name'] ?>
+                                <?php } ?>
+                              </option>       
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <button id="searchbutton" type="button" class="btn btn-success">Search</button>
+                <div class="col p-4 justify-content-center">
+                  <button id="searchbutton" type="button" class="btn btn-success">Search</button>        
                 </div>
+                
             </div>
-
-
             <div class="row" id="reportDiv" style="display: none">
                 <div class="col-md-6">
                     <form action="reportsDownload.php" method="post">
@@ -210,7 +208,8 @@ $hills = getHills();
 </div>
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<script src="js/validation.js"></script>
 </body>
 
 </html>

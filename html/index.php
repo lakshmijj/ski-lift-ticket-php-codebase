@@ -22,11 +22,8 @@ if($request_method === "POST"){
 
 //form errors
 $fields = [
-    'fname',
-    'lname',
-    'email',
-    'program',
-    'returning',
+    'username',
+    'password'
 ];
 $optional = [];
 $values = [];

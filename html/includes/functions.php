@@ -31,21 +31,11 @@ function connectToDB()
 */
 
 function authenticate(array $data){
-    $conn = connectToDB();
-    // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-    //$data = $conn->query("SELECT * FROM app_users")->fetchAll();
-    //$sql = "SELECT user_id FROM app_users WHERE user_name = :username AND user_pwd = :password";
-    //$data = $conn->prepare($sql);
-    //var_dump($data['username']);
-
-    // $statement = $conn->prepare("SELECT COUNT(*) FROM app_users WHERE `user_name` = :username AND `user_pwd` = :password;");    
-    // $statement->bindParam(":username", $data['username']);
-    // $statement->bindParam(":password", $data['password']);
-    // $statement->execute();
-
-    $sql = "SELECT COUNT(*) FROM app_users WHERE user_name = '".$data['username'] ."' AND user_pwd = '".$data['password']."'";
+    $conn = connectToDB();    
+    $sql = "SELECT * FROM app_users WHERE user_name = '".$data['username'] ."' AND user_pwd = '".$data['password']."'";
     $result = $conn->query($sql)->fetchAll();
-    if(isset($result) && $result[0][0]>0){
+    // if(isset($result) && $result[0][0]>0){
+    if(isset($result) && isset($result[0])){    
         unset($_SESSION['logginError']);
         unset($_SESSION['logginErrorMessage']);
         unset($_SESSION['userMessage']);
@@ -53,10 +43,26 @@ function authenticate(array $data){
         $_SESSION['name'] = $_POST['username'];
         $_SESSION['start'] = time();
         $_SESSION['expire'] = $_SESSION['start'] + (600 * 60); //
+
+        //fetch user's hill and store the hill id and name in session
+        
+        $userHill = (int)$result[0]['hill_id'];
+        
+        if($userHill > 0){
+            $qry = "SELECT hill_id,hill_name FROM app_hills WHERE hill_id = $userHill";
+            $hillData = $conn->query($qry)->fetchAll();
+            $_SESSION['hill_id'] = $hillData[0]['hill_id'];
+            $_SESSION['hill_name'] = $hillData[0]['hill_name'];
+        }else{
+            $_SESSION['hill_id'] = 0;
+            $_SESSION['hill_name'] = 'registrar';
+        }        
         return header("Location: existingmembers.php");
     }else{
         unset($_SESSION['name']);
         unset($_SESSION['expire']);
+        unset($_SESSION['hill_id']);
+        unset($_SESSION['hill_name']);
         $_SESSION['logginError'] = TRUE;
         $_SESSION['logginErrorMessage'] = 'Invalid login, please contact administrator for the support';
         return header("Location: index.php");

@@ -11,7 +11,7 @@
 
 <nav class="navtop">
     <div>      
-       <h1 class="ml-2">SASC Admin</h1>
+       <h1 class="ml-2">SASC Admin  <span class="text-uppercase m-4"><?php echo $_SESSION['hill_name']?></span></h1>
         <a href="existingmembers.php"><i class="fas fa-user-circle"></i>Members</a>
         <a href="authenticate.php"><i class="fas fa-sign-out-alt"></i>Update Visit</a>
         <a href="reports.php"><i class="fas fa-sign-out-alt"></i>Reports</a>

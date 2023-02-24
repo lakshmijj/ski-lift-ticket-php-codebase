@@ -138,3 +138,8 @@ body.loggedin {
 	padding: 5px;
 	margin: 0 0 10px 0;
 }
+
+select[multiple] {
+  padding-right: 0;
+  height: 7rem;
+}
