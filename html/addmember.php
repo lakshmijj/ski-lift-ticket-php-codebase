@@ -13,8 +13,8 @@ $fields = [
     'mem_last_name',
     'mem_status',
     'mem_payment_status',
-    'mem_bar_code',
-    'mem_last_updated',
+    'mem_bar_code'
+    // 'mem_last_updated',
 ];
 
 $optional = [];
@@ -139,17 +139,17 @@ if($request_method == 'POST') {
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="mem_last_updated">Date last updated <nobr class="text-danger">*</nobr></label>
                             <input type="datetime-local" id="mem_last_updated" name="mem_last_updated" class="form-control" value="" />
-                        </div>
+                        </div> -->
 
                        
                         <label for="mem_last_updated">Memeber Pass Number<nobr class="text-danger"></nobr></label>
                         <input type="text" id="mem_pass_number" name="mem_pass_number" class="form-control" value="" required />
                         
                          <!-- HIDDEN INPUTS FOR BARCODE AND ID -->
-                        <input type="hidden" id="mem_bar_code" name="mem_bar_code" class="form-control" value="10612587315464669148831491824678452609529717308215" required />
+                        <input type="hidden" id="mem_bar_code" name="mem_bar_code" class="form-control" value="" required />
 
                         <div class="mb-3 mt-4">
                             <input type="submit" class="btn btn-primary" value="Add Member" />

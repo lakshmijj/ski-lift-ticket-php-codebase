@@ -77,10 +77,8 @@ function authenticate(array $data){
 function addMember(array $data)
 {
     $conn = connectToDB();
-
     if ($conn) {
-        $sql = "INSERT INTO app_members (mem_pass_number, mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated) VALUES (:mem_pass_number, :mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)";
-
+        $sql = "INSERT INTO app_members (mem_pass_number, mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated) VALUES (:mem_pass_number, :mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, NOW())";
         $conn->prepare($sql)->execute($data);
     }
 
@@ -101,7 +99,7 @@ function updateMember(array $data, int $id)
     if ($conn) {
         $sql = "UPDATE app_members 
         -- SET (mem_first_name, mem_last_name, mem_status, mem_payment_status, mem_bar_code, mem_last_updated)
-        SET mem_first_name=:mem_first_name, mem_last_name=:mem_last_name, mem_status=:mem_status, mem_payment_status=:mem_payment_status, mem_bar_code=:mem_bar_code, mem_last_updated=:mem_last_updated
+        SET mem_first_name=:mem_first_name, mem_last_name=:mem_last_name, mem_status=:mem_status, mem_payment_status=:mem_payment_status, mem_bar_code=:mem_bar_code, mem_last_updated=NOW()
         -- VALUES (:mem_first_name, :mem_last_name, :mem_status, :mem_payment_status, :mem_bar_code, :mem_last_updated)
         WHERE mem_pass_number = '$id'";
 

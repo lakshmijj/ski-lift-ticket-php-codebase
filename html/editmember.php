@@ -91,7 +91,7 @@ if($request_method == 'POST') {
                 <div class="col-10 col-sm-8 col-md-6 rounded shadow border">
                     <form method="post" action="<?php htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="py-4 px-3 needs-validation" novalidate>
                         <div class="mb-3 has-validation">
-                            <label for="mem_first_name">First Name <nobr class="text-danger">*</nobr></label>
+                            <label for="mem_first_name">First Name <nobr class="text-danger"></nobr></label>
                             <input type="text" id="mem_first_name" name="mem_first_name" placeholder="John" class="form-control <?php echo isInvalid('mem_first_name'); ?>" value="<?php echo $member['mem_first_name'] ?>" required />
 
                             <div class="invalid-feedback">
@@ -99,14 +99,14 @@ if($request_method == 'POST') {
                             </div>
                         </div>
                         <div class="mb-3 has-validation">
-                            <label for="mem_last_name">Last Name <nobr class="text-danger">*</nobr></label>
+                            <label for="mem_last_name">Last Name <nobr class="text-danger"></nobr></label>
                             <input type="text" id="mem_last_name" name="mem_last_name" placeholder="Wick" class="form-control <?php echo isInvalid('mem_last_name'); ?>" value="<?php echo $member['mem_last_name'] ?>" required />
 
                             <div class="invalid-feedback">
                                 Please enter a last name
                             </div>
                         </div>
-                        <h5>Member Status<nobr class="text-danger">*</nobr>
+                        <h5>Member Status<nobr class="text-danger"></nobr>
                         </h5>
                         <div class="mb-3 has-validation">
                             <div class="form-check">
@@ -122,7 +122,7 @@ if($request_method == 'POST') {
                                 </div>
                             </div>
                         </div>
-                        <h5>Payment Status <nobr class="text-danger">*</nobr>
+                        <h5>Payment Status <nobr class="text-danger"></nobr>
                         </h5>
 
                         <div class="mb-3 has-validation">
@@ -143,16 +143,16 @@ if($request_method == 'POST') {
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="mem_last_updated">Date last updated <nobr class="text-danger">*</nobr></label>
                             <input type="datetime-local" id="mem_last_updated" name="mem_last_updated" class="form-control" value="" />
-                        </div>
+                        </div> -->
 
                         <!-- HIDDEN INPUTS FOR BARCODE AND ID -->
-                        <input type="hidden" id="mem_bar_code" name="mem_bar_code" class="form-control" value="10612587315464669148831491824678452609529717308215" required />
+                        <input type="hidden" id="mem_bar_code" name="mem_bar_code" class="form-control" value="<?php echo $member['mem_bar_code'] ?>" required />
 
                         <div class="mb-3">
-                            <input type="submit" class="btn btn-primary" value="Register" />
+                            <input type="submit" class="btn btn-primary" value="Update" />
                         </div>
                     </form>
                 </div>
