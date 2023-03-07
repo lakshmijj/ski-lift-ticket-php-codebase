@@ -148,16 +148,19 @@ function getMember($id)
 function memberValid($id)
 {
     $conn = connectToDB();
-    $member = getMember($id)[0];
     $valid = false;
 
-    if ($conn) {
-        $data = $conn->query("SELECT * FROM app_members WHERE mem_pass_number = $id")->fetchAll();
-    }
-
-    if ($data) {
-        if ($member['mem_status'] === 'Active') {
-            $valid = true;
+    if (isset(getMember($id)[0])) {
+        $member = getMember($id)[0];
+    
+        if ($conn) {
+            $data = $conn->query("SELECT * FROM app_members WHERE mem_pass_number = $id")->fetchAll();
+        }
+    
+        if ($data) {
+            if ($member['mem_status'] === 'Active') {
+                $valid = true;
+            }
         }
     }
 
@@ -172,7 +175,7 @@ function memberValid($id)
 function logVisit(array $data) {
     $conn = connectToDB();
 
-    if ($conn) {
+    if ($conn ) {
         $sql = "INSERT INTO mem_visits (mem_pass_number, hill_id, visited_on) 
         VALUES (:mem_pass_number, :hill_id, CURRENT_TIMESTAMP)";
 
