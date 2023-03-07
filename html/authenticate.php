@@ -100,7 +100,7 @@ if ($request_method == 'POST') {
                             </div>
                         </div>
 
-                        <input type="hidden" id="hill_id" name="hill_id" class="form-control" value="1" required />
+                        <input type="hidden" id="hill_id" name="hill_id" class="form-control" value="<?php echo (int)$_SESSION['hill_id']; ?>" required />
 
                         <div class="mb-3">
                             <input type="submit" id="btnSubmit" class="btn btn-primary" value="Verify Membership" />
