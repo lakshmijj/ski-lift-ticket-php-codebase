@@ -26,6 +26,8 @@ if ($request_method == 'POST') {
     header("refresh: 0");
 }
 
+//jquery list goes here
+
 ?>
 
 <!doctype html>
